@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-justify">
+
+  <div class="mt-4">
+    <h1>
+      Didattica Integrata
+    </h1>
+    <h2>
+      Di cosa si tratta?
+    </h2>
+
+    <p class="mt-5">
+      Il progetto ha come finalità la lotta alla dispersione scolastica in quanto prevede lo sviluppo della motivazione
+      allo studio attraverso la ricerca.
+    </p>
+    <p>
+      Obiettivo principale è lo sviluppo del critical thinking ovvero di tutte le competenze di cittadinanza consapevole
+      legate alla capacità di comprensione, argomentazione, decisione.
+    </p>
+    <p>
+      Gli obiettivi specifici da perseguire sono il recupero e il potenziamento di tutte le competenze trasversali di base
+      quali la comprensione di un testo scritto e la produzione di varie tipologie testuali (testo espositivo,
+      argomentativo, valutativo) e la capacità di argomentazione sia scritta che orale a diversi livelli a seconda del
+      percorso scolastico.
+    </p>
+    <p>
+      Alla fine del curricolo lo studente dovrà essere in grado di costruire ed esporre con proprietà di linguaggio,
+      fluidità, coerenza e correttezza di ragionamento discorsi su argomenti dati di qualunque natura (legati
+      all’indirizzo di studio o a problematiche di cittadinanza attiva).
+    </p>
+    <p>
+      Il metodo utilizzato dovrà essere quello della didattica integrata cioè dell’integrazione tra le discipline
+      umanistiche e scientifiche attraverso la costruzione di percorsi ad hoc che prevedano l’inserimento di elementi di
+      logica proposizionale, retorica ed etica.
+    </p>
+  </div>
+
+  <div class="mt-5" id="team">
+    <h1>
+      Chi siamo?
+    </h1>
+    <h2>
+      Scopri le menti dietro al progetto.
+    </h2>
+
+    <p class="mt-5">
+      Questo sito è stato pensato dagli alunni della classe 5B informatica e realizzato dagli studenti Simone Salerno e
+      Paolo Cislaghi dell"istituto IIS Andrea Ponti di Gallarate.
+    </p>
+    <p>
+      È il frutto di un lavoro collettivo di riflessione sulle competenze di cittadinanza e disciplinari: ci siamo chiesti
+      che cosa dovevamo saper fare alla fine del nostro percorso di studi per operare adeguatamente nel mondo del lavoro e
+      per accedere al percorso di studi universitario.
+    </p>
+    <p>
+      L’esperienza dei PCTO è servita come laboratorio di ricerca e di preparazione alla nostra carriera futura.
+    </p>
+
+    <center class="desktop">
+      <img src="{{ url_for('static', filename='risorse/img-1.jpg') }}" class="img-thumbnail mt-5 mb-5" style="width: 80%" />
+    </center>
+
+    <center class="mobile">
+      <img src="{{ url_for('static', filename='risorse/img-1.jpg') }}" class="img-thumbnail mt-5 mb-5" />
+    </center>
+
+    <p>
+      Elenco degli studenti che hanno contribuito al progetto:
+    </p>
+    <div class="row">
+      <div class="col-5">
+        <ul>
+          <li>Alario Federica</li>
+          <li>Bonacina Andrea</li>
+          <li>Brugnoni Enrico</li>
+          <li>Cislaghi Paolo</li>
+          <li>D'Agnese Marco</li>
+          <li>Granito Luca</li>
+          <li>Mattia Riccardo</li>
+          <li>Mauro Alessio</li>
+          <li>Mesiano Andrea</li>
+          <li>Miao Sofia</li>
+          <li>Poletto Emanuele</li>
+          <li>Rashad Asad</li>
+          <li>Romito Gabriele</li>
+          <li>Salerno Simone</li>
+          <li>Savio Riccardo</li>
+          <li>Sorrentino Andrea</li>
+          <li>Tosato Alessio</li>
+        </ul>
+      </div>
+      <div class="col desktop">
+        <div id="carouselExampleControls" class="carousel slide" style="width: 80%" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="{{ url_for('static', filename='risorse/img-2.jpeg') }}" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ url_for('static', filename='risorse/img-3.jpeg') }}" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ url_for('static', filename='risorse/img-4.jpeg') }}" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ url_for('static', filename='risorse/img-5.jpeg') }}" class="d-block w-100">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <center>
+      <div class="mobile mt-5">
+        <div id="carouselExampleControls" class="carousel slide" style="width: 80%" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="{{ url_for('static', filename='risorse/img-2.jpeg') }}" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ url_for('static', filename='risorse/img-3.jpeg') }}" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ url_for('static', filename='risorse/img-4.jpeg') }}" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ url_for('static', filename='risorse/img-5.jpeg') }}" class="d-block w-100">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </center>
+
+  <div class="mt-5 mb-5" id="contatti">
+    <h1>
+      Hai bisogno di contattarci?
+    </h1>
+    <h2>
+      Utilizza i metodi qui sotto.
+    </h2>
+
+    <p class="mt-5">
+      Per qualunque necessità di contatto, suggerimenti o problemi potete contattarci alla mail <a href="mailto:contatti@didatticaintegrata.it">contatti@didatticaintegrata.it</a>.
+    </p>
+  </div>
+
+</div>
+
+{% endblock %}

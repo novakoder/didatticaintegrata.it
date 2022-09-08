@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- alert -->
+<div id="alert" class="position-fixed top-0 end-0 p-3 hidden" style="z-index: 1061; margin-top: 100px">
+  {% with messaggi = get_flashed_messages() %}
+  <div id="toastdb" class="toast hide">
+    {% if messaggi and messaggi[0] != "True" %}
+    <div class="toast-header bg-success">
+      <strong class="me-auto text-light">Successo</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      {{ messaggi[0] }}
+    </div>
+    {% endif %}
+    {% if messaggi and messaggi[0] == "True" %}
+    <div class="toast-header bg-danger">
+      <strong class="me-auto text-light">Errore</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Email già registrata.
+    </div>
+    {% endif %}
+  </div>
+  {% endwith %}
+
+  <div id="toastjs" class="toast hide">
+    <div class="toast-header bg-danger">
+      <strong class="me-auto text-light">Errore</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div id="errore-testo" class="toast-body"></div>
+  </div>
+
+</div>
+
+<!-- titolo -->
+<div class="mx-auto mt-4 pb-3 profilo">
+  <h1>
+    Il tuo profilo
+  </h1>
+  <h3>
+    Visualizza e modifica i dati del tuo profilo
+  </h3>
+</div>
+
+<!-- form -->
+<div class="mx-auto mt-5 mb-5 profilo">
+  <form method="POST" action="/modifica" name="form" onsubmit="return validaForm()">
+
+    <!-- campi -->
+    <div class="row align-items-start mb-1">
+      <div class="col-4">
+        <h4>Nome</h4>
+      </div>
+      <div class="col">
+        <input class="form-control mb-2" type="text" value="{{ current_user.nome }}" name="nome" readonly>
+      </div>
+    </div>
+    <div class="row align-items-start mb-1">
+      <div class="col-4">
+        <h4>Cognome</h4>
+      </div>
+      <div class="col">
+        <input class="form-control mb-2" type="text" value="{{ current_user.cognome }}" name="cognome" readonly>
+      </div>
+    </div>
+    <div class="row align-items-start mb-1">
+      <div class="col-4">
+        <h4>Email</h4>
+      </div>
+      <div class="col">
+        <input class="form-control mb-2" type="text" value="{{ current_user.email }}" name="email" readonly>
+      </div>
+    </div>
+    <div class="row align-items-start mb-1">
+      <div class="col-4">
+        <h4>Indirizzo</h4>
+      </div>
+      <div class="col">
+        <div id="indirizzo">
+          <input class="form-control mb-2" type="text" value="{{ current_user.indirizzo }}" readonly>
+        </div>
+        <div class="hidden" id="indirizzo_lista">
+          <select name="indirizzo" class="form-select mb-2" style="text-indent: -2px;">
+            <option class="has-text-weight-semibold" disabled>Sede Via Stelvio</option>
+            <option id="Automazione">Automazione</option>
+            <option id="Costruzioni aeronautiche">Costruzioni aeronautiche</option>
+            <option id="Conduzione del mezzo aereo">Conduzione del mezzo aereo</option>
+            <option id="Elettrotecnica">Elettrotecnica</option>
+            <option id="Energia">Energia</option>
+            <option id="Informatica">Informatica</option>
+            <option id="Meccanica e Meccatronica">Meccanica e Meccatronica</option>
+            <option class="has-text-weight-semibold" disabled>Sede Piazza Giovine Italia</option>
+            <option id="Biotecnologie ambientali">Biotecnologie ambientali</option>
+            <option id="Manutenzione e Assistenza Tecnica">Manutenzione e Assistenza Tecnica</option>
+            <option class="has-text-weight-semibold" disabled>Sede Somma Lombardo</option>
+            <option id="Costruzioni, Ambiente e Territorio">Costruzioni, Ambiente e Territorio</option>
+            <option id="Gestione, Ambiente e Territorio">Gestione, Ambiente e Territorio</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-start mt-4">
+      <div class="col left">
+        <button type="button" class="btn btn-primary" id="modificapass" data-bs-toggle="modal" data-bs-target="#passwordModal">Modifica password</button>
+      </div>
+      <div class="col right">
+        <button type="button" class="btn btn-primary" id="modifica">Modifica informazioni</button>
+      </div>
+      <div class="col right hidden" id="salva">
+        <button type="submit" class="btn btn-success">Salva</button>
+        <button type="button" class="btn btn-danger ms-2" id="cancella">Cancella</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- modal modifica password -->
+<div class="modal fade" id="passwordModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Modifica la tua password</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="/profilo" name="formPass" onsubmit="return validaFormPass()">
+        <div class="modal-body">
+          <p class="fs-5">Password attuale</p>
+          <input class="form-control mb-3" type="password" placeholder="Digita" name="vecchia_pass">
+          <p class="fs-5">Nuova password</p>
+          <input class="form-control mb-3" type="password" placeholder="Digita" name="nuova_pass">
+          <p class="fs-5">Conferma password</p>
+          <input class="form-control mb-2" type="password" placeholder="Digita" name="nuova_passw">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Salva modifiche</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- script -->
+<script>
+  document.getElementById("{{ current_user.indirizzo }}").setAttribute("selected", "");
+
+  $(window).bind('scroll', function() {
+    if ($(window).scrollTop() > 100) {
+      $("#alert").css("margin-top", "0px");
+    } else {
+      $("#alert").css("margin-top", "100px");
+    }
+  });
+
+  var options = {
+    delay: 3000
+  }
+
+  if ("{{ modal }}" == "True") {
+    $(".modal").addClass("is-active");
+    $("#errore-pass").html("La password inserita non è corretta.");
+    $("#errore-modifica").removeClass("hidden");
+  }
+
+  function validaForm() {
+    var verificaNome = /^[A-Za-z']{1,20}$/;
+    var verificaEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var nome = document.forms["form"]["nome"].value;
+    var cognome = document.forms["form"]["cognome"].value;
+    var email = document.forms["form"]["email"].value;
+    var indirizzo = document.forms["form"]["indirizzo"].value;
+
+    var toastElList = [].slice.call(document.querySelectorAll('#toastjs'));
+    var toastList = toastElList.map(function(toastEl) {
+      return new bootstrap.Toast(toastEl, options)
+    });
+
+    $("#alert").css("margin-top", "100px");
+
+    if (nome == "" || cognome == "" || email == "" || indirizzo == "") {
+      $("#errore-testo").html("Compilare tutti i campi.");
+      $("#alert").removeClass("hidden");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    if (!verificaNome.test(nome) || !verificaNome.test(cognome)) {
+      $("#errore-testo").html("Inserire solo caratteri alfabetici in nome e cognome, massimo 20.");
+      $("#alert").removeClass("hidden");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    if (!verificaEmail.test(email)) {
+      $("#errore-testo").html("Formato email errato.");
+      $("#alert").removeClass("hidden");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    return true;
+
+  }
+
+  function validaFormPass() {
+    var verificaPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+    var vecchia_pass = document.forms["formPass"]["vecchia_pass"].value;
+    var nuova_pass = document.forms["formPass"]["nuova_pass"].value;
+    var nuova_passw = document.forms["formPass"]["nuova_passw"].value;
+
+    var toastElList = [].slice.call(document.querySelectorAll('#toastjs'));
+    var toastList = toastElList.map(function(toastEl) {
+      return new bootstrap.Toast(toastEl, options)
+    });
+
+    $("#alert").css("margin-top", "0px");
+
+    if (vecchia_pass == "" || nuova_pass == "" || nuova_passw == "") {
+      $("#errore-testo").html("Compilare tutti i campi.");
+      $("#alert").removeClass("hidden");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    if (!verificaPass.test(nuova_pass)) {
+      $("#errore-testo").html("La password deve contenere: minimo 8 caratteri, almeno un numero, una lettera maiuscola e una minuscola.");
+      $("#alert").removeClass("hidden");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    if (nuova_pass != nuova_passw) {
+      $("#errore-testo").html("La nuova password non corrisponde.");
+      $("#alert").removeClass("hidden");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    return true;
+
+  }
+
+  var myToastEl = document.getElementById('toastjs');
+  myToastEl.addEventListener('hide.bs.toast', function() {
+    $("#alert").addClass("hidden");
+  });
+
+  var myToastEl = document.getElementById('toastdb');
+  myToastEl.addEventListener('hide.bs.toast', function() {
+    $("#alert").addClass("hidden");
+  });
+
+  $("#modifica").click(function() {
+    $("#modifica").addClass("hidden");
+    $("#indirizzo").addClass("hidden");
+    $("#password").addClass("hidden");
+    $("#indirizzo_lista").removeClass("hidden");
+    $("#salva").removeClass("hidden");
+    $(".form-control").removeAttr("readonly");
+    $("select").removeAttr("disabled");
+    $("#modificapass").addClass("hidden");
+  });
+
+  $("#cancella").click(function() {
+    window.location = "{{ url_for('main.profilo') }}";
+  });
+</script>
+
+{% with messaggi = get_flashed_messages() %}
+{% if messaggi and messaggi[0] != True %}
+<script>
+  window.onload = function() {
+
+    var toastElList = [].slice.call(document.querySelectorAll('#toastdb'));
+    var toastList = toastElList.map(function(toastEl) {
+      return new bootstrap.Toast(toastEl, options)
+    });
+    $("#alert").removeClass("hidden");
+    toastList.forEach(toast => toast.show());
+  };
+</script>
+{% endif %}
+{% endwith %}
+
+
+{% endblock %}

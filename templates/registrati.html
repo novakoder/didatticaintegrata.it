@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- titolo -->
+<div class="mx-auto center mt-4 mb-5">
+  <h1>
+    Registrati
+  </h1>
+</div>
+
+<!-- alert -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 5; margin-top: 100px">
+  {% with messaggi = get_flashed_messages() %}
+  {% if messaggi %}
+  <div id="toastdb" class="toast">
+    <div class="toast-header bg-danger">
+      <strong class="me-auto text-light">Errore</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      {{ messaggi[0] }} Vai alla pagina di <a href="{{ url_for('auth.accedi') }}">accesso</a>.<span class="modal-button-close delete" id="closerrore" aria-label="close"></span>
+    </div>
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <div id="toastjs" class="toast">
+    <div class="toast-header bg-danger">
+      <strong class="me-auto text-light">Errore</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div id="errore-testo" class="toast-body"></div>
+  </div>
+
+</div>
+
+<!-- form -->
+<div class="mx-auto form-accesso">
+  <form method="POST" action="/registrati" name="form" onsubmit="return validaForm()">
+
+    <!-- campi -->
+    <div class="row align-items-start mb-2">
+      <div class="col">
+        <input class="form-control mb-2" type="text" name="nome" placeholder="Nome" autofocus="">
+      </div>
+    </div>
+    <div class="row align-items-start mb-2">
+      <div class="col">
+        <input class="form-control mb-2" type="text" name="cognome" placeholder="Cognome" autofocus="">
+      </div>
+    </div>
+    <div class="row align-items-start mb-2">
+      <div class="col">
+        <input class="form-control mb-2" type="text" name="email" placeholder="Email" autofocus="">
+      </div>
+    </div>
+    <div class="row align-items-start mb-2">
+      <div class="col">
+        <select name="indirizzo" class="form-select mb-2">
+          <option selected hidden>Indirizzo</option>
+          <option class="has-text-weight-semibold" disabled>Sede Via Stelvio</option>
+          <option id="Automazione">Automazione</option>
+          <option id="Costruzioni aeronautiche">Costruzioni aeronautiche</option>
+          <option id="Conduzione del mezzo aereo">Conduzione del mezzo aereo</option>
+          <option id="Elettrotecnica">Elettrotecnica</option>
+          <option id="Energia">Energia</option>
+          <option id="Informatica">Informatica</option>
+          <option id="Meccanica e Meccatronica">Meccanica e Meccatronica</option>
+          <option class="has-text-weight-semibold" disabled>Sede Piazza Giovine Italia</option>
+          <option id="Biotecnologie ambientali">Biotecnologie ambientali</option>
+          <option id="Manutenzione e Assistenza Tecnica">Manutenzione e Assistenza Tecnica</option>
+          <option class="has-text-weight-semibold" disabled>Sede Somma Lombardo</option>
+          <option id="Costruzioni, Ambiente e Territorio">Costruzioni, Ambiente e Territorio</option>
+          <option id="Gestione, Ambiente e Territorio">Gestione, Ambiente e Territorio</option>
+        </select>
+      </div>
+    </div>
+    <div class="row align-items-start mb-2">
+      <div class="col">
+        <input class="form-control mb-2" type="password" name="password" placeholder="Password" autofocus="">
+      </div>
+    </div>
+    <div class="row align-items-start mb-4">
+      <div class="col">
+        <input class="form-control mb-2" type="password" name="conferma_pass" placeholder="Conferma password" autofocus="">
+      </div>
+    </div>
+    <div class="row align-items-start">
+      <div class="col d-grid gap-2 col-5 mx-auto">
+        <button type="submit" class="btn btn-primary">Registrati</button>
+      </div>
+    </div>
+
+    <h5 class="center mt-5 pb-3">
+      Hai già un account? <a class="ms-2" href="{{ url_for('auth.accedi') }}">Accedi</a>
+    </h5>
+
+  </form>
+</div>
+
+<script>
+  function validaForm() {
+    var verificaPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+    var verificaNome = /^[A-Za-z']{1,20}$/;
+    var verificaEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var nome = document.forms["form"]["nome"].value;
+    var cognome = document.forms["form"]["cognome"].value;
+    var email = document.forms["form"]["email"].value;
+    var indirizzo = document.forms["form"]["indirizzo"].value;
+    var password = document.forms["form"]["password"].value;
+    var conferma_pass = document.forms["form"]["conferma_pass"].value;
+
+    var options = {
+      delay: 5000
+    };
+    var toastElList = [].slice.call(document.querySelectorAll('#toastjs'))
+    var toastList = toastElList.map(function(toastEl) {
+      // Creates an array of toasts (it only initializes them)
+      return new bootstrap.Toast(toastEl, options)
+    });
+
+    if (nome == "" || cognome == "" || email == "" || indirizzo == "Indirizzo" || password == "" || conferma_pass == "") {
+      $("#errore-testo").html("Compilare tutti i campi.");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    if (!verificaNome.test(nome) || !verificaNome.test(cognome)) {
+      $("#errore-testo").html("Inserire solo caratteri alfabetici in nome e cognome, massimo 20.");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    if (!verificaEmail.test(email)) {
+      $("#errore-testo").html("Formato email errato.");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    if (!verificaPass.test(password)) {
+      $("#errore-testo").html("La password deve contenere: minimo 8 caratteri, almeno un numero, una lettera maiuscola e una minuscola.");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    if (password != conferma_pass) {
+      $("#errore-testo").html("Le password non corrispondono.");
+      toastList.forEach(toast => toast.show());
+      return false;
+    }
+
+    return true;
+
+  }
+</script>
+
+{% with messaggi = get_flashed_messages() %}
+{% if messaggi %}
+<script>
+  window.onload = function() {
+    var options = {
+      delay: 5000
+    };
+
+    var toastElList = [].slice.call(document.querySelectorAll('#toastdb'))
+    var toastList = toastElList.map(function(toastEl) {
+      // Creates an array of toasts (it only initializes them)
+      return new bootstrap.Toast(toastEl, options)
+    });
+    toastList.forEach(toast => toast.show()); // This show them
+  };
+</script>
+{% endif %}
+{% endwith %}
+
+{% endblock %}
